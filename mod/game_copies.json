@@ -1,0 +1,14 @@
+{
+  "sounds/hit_indicators/damage_send_crit_01.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_crit_02.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_crit_03.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_crit_04.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_crit_05.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_crit_06.vsnd_c": "sounds/ui/ui_commend_receive_01.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_01.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_02.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_03.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_04.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_05.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c",
+  "sounds/hit_indicators/damage_send_default_06.vsnd_c": "sounds/ui/ui_cheat_frog.vsnd_c"
+}
