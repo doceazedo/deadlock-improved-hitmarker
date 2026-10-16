@@ -1,0 +1,17 @@
+{
+  "gain": 1.0,
+  "sounds": {
+    "sounds/hit_feedback/hit_01": "sounds/hit_01.wav",
+    "sounds/hit_feedback/hit_02": "sounds/hit_02.wav",
+    "sounds/hit_feedback/hit_03": "sounds/hit_03.wav",
+    "sounds/hit_feedback/hit_04": "sounds/hit_04.wav",
+    "sounds/hit_feedback/hit_05": "sounds/hit_05.wav",
+    "sounds/hit_feedback/hit_06": "sounds/hit_06.wav",
+    "sounds/hit_feedback/headshot_01": "sounds/headshot_01.wav",
+    "sounds/hit_feedback/headshot_02": "sounds/headshot_02.wav",
+    "sounds/hit_feedback/headshot_03": "sounds/headshot_03.wav",
+    "sounds/hit_feedback/headshot_04": "sounds/headshot_04.wav",
+    "sounds/hit_feedback/headshot_05": "sounds/headshot_05.wav",
+    "sounds/hit_feedback/headshot_06": "sounds/headshot_06.wav"
+  }
+}

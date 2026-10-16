@@ -1,0 +1,160 @@
+{
+  "volume_offset_db": 6.0,
+  "silence": [
+    "Base.Bullet.Impact"
+  ],
+  "events": {
+    "soundevents/damage.vsndevts": {
+      "Damage.Send": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ]
+      },
+      "Damage.Send.Crit": {
+        "files": [
+          "sounds/hit_feedback/headshot_01.vsnd",
+          "sounds/hit_feedback/headshot_02.vsnd",
+          "sounds/hit_feedback/headshot_03.vsnd",
+          "sounds/hit_feedback/headshot_04.vsnd",
+          "sounds/hit_feedback/headshot_05.vsnd",
+          "sounds/hit_feedback/headshot_06.vsnd"
+        ]
+      },
+      "Damage.Receive.Default": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Damage.Receive.NPC": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Damage.Receive.Bullet.Minor": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Damage.Receive.Crit": {
+        "files": [
+          "sounds/hit_feedback/headshot_01.vsnd",
+          "sounds/hit_feedback/headshot_02.vsnd",
+          "sounds/hit_feedback/headshot_03.vsnd",
+          "sounds/hit_feedback/headshot_04.vsnd",
+          "sounds/hit_feedback/headshot_05.vsnd",
+          "sounds/hit_feedback/headshot_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      }
+    },
+    "soundevents/player.vsndevts": {
+      "Player.Bullet.Impact.Default": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Player.Bullet.Impact.Hero": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Player.Bullet.Impact.Hero.Large": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      },
+      "Player.Bullet.Impact.Trooper": {
+        "files": [
+          "sounds/hit_feedback/hit_01.vsnd",
+          "sounds/hit_feedback/hit_02.vsnd",
+          "sounds/hit_feedback/hit_03.vsnd",
+          "sounds/hit_feedback/hit_04.vsnd",
+          "sounds/hit_feedback/hit_05.vsnd",
+          "sounds/hit_feedback/hit_06.vsnd"
+        ],
+        "set": {
+          "chip_damage_offset_db": 0.0,
+          "damage_effectiveness_enabled": false,
+          "instance_attenuator_enabled": 0.0,
+          "health_fraction_curve_enabled": 0.0
+        }
+      }
+    }
+  }
+}
