@@ -3,6 +3,26 @@
   "silence": [
     "Base.Bullet.Impact"
   ],
+  "add": {
+    "soundevents/damage.vsndevts": {
+      "ImprovedHitmarker.Ability": {
+        "base": "Base.UI",
+        "files": [
+          "sounds/improved_hitmarker/hit_01.vsnd",
+          "sounds/improved_hitmarker/hit_02.vsnd",
+          "sounds/improved_hitmarker/hit_03.vsnd",
+          "sounds/improved_hitmarker/hit_04.vsnd",
+          "sounds/improved_hitmarker/hit_05.vsnd",
+          "sounds/improved_hitmarker/hit_06.vsnd"
+        ],
+        "set": {
+          "volume": -12.0,
+          "mixer_mixgroup": "Dmg-Send",
+          "limiter_max": 2.0
+        }
+      }
+    }
+  },
   "events": {
     "soundevents/damage.vsndevts": {
       "Damage.Send": {

@@ -10,7 +10,8 @@
 }
 
 .show_hit_marker #hit_markers,
-.show_crit_hit_marker #hit_markers
+.show_crit_hit_marker #hit_markers,
+.hf_ability #hit_markers
 {
 	opacity: hfOpacity;
 	transition-property: opacity;

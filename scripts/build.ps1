@@ -202,6 +202,20 @@ function Edit-Event([string]$Text, [string]$EventName, $Override) {
     return $updated
 }
 
+function Add-Event([string]$Text, [string]$EventName, $Definition) {
+    if ($Text.Contains("`t$EventName = `n")) {
+        throw "event $EventName already exists"
+    }
+    $body = "`t`tbase = `"$($Definition.base)`"`n"
+    foreach ($field in (Get-Pairs $Definition.set)) {
+        $body = Set-Field $body $field.Name (Format-Kv3Value $field.Value)
+    }
+    $lines = -join ($Definition.files | ForEach-Object { "`t`t`t`"$_`",`n" })
+    $body = Set-Field $body "vsnd_files" "`n`t`t[`n$lines`t`t]"
+    $end = $Text.LastIndexOf("}", [StringComparison]::Ordinal)
+    return $Text.Substring(0, $end) + "`t$EventName = `n`t{`n$body`t}`n" + $Text.Substring($end)
+}
+
 function Get-SilencedEvents($Texts, [string[]]$Roots) {
     $bases = New-Object 'Collections.Generic.Dictionary[string,object]'
     foreach ($resource in $Texts.Keys) {
@@ -311,6 +325,24 @@ function Add-SoundEvents($Sources, [string]$Scratch) {
         }
     }
 
+    $additions = [ordered]@{}
+    foreach ($resourcePair in (Get-Pairs $config.add)) {
+        $additions[$resourcePair.Name] = [ordered]@{}
+        if (-not $overrides.ContainsKey($resourcePair.Name)) {
+            $overrides[$resourcePair.Name] = [ordered]@{}
+        }
+        foreach ($eventPair in (Get-Pairs $resourcePair.Value)) {
+            $definition = $eventPair.Value
+            $fields = [ordered]@{}
+            foreach ($field in (Get-Pairs $definition.set)) {
+                $fields[$field.Name] = $field.Value
+            }
+            $volume = if ($fields.Contains("volume")) { [double]$fields["volume"] } else { Get-EffectiveVolume $bodies $definition.base }
+            $fields["volume"] = [math]::Round($volume + $offset, 3)
+            $additions[$resourcePair.Name][$eventPair.Name] = [pscustomobject]@{ base = $definition.base; files = $definition.files; set = $fields }
+        }
+    }
+
     $compiled = @()
     $eventCount = 0
     foreach ($resource in ($overrides.Keys | Sort-Object)) {
@@ -321,6 +353,12 @@ function Add-SoundEvents($Sources, [string]$Scratch) {
         foreach ($eventPair in (Get-Pairs $overrides[$resource])) {
             $text = Edit-Event $text $eventPair.Name $eventPair.Value
             $eventCount++
+        }
+        if ($additions.Contains($resource)) {
+            foreach ($eventPair in (Get-Pairs $additions[$resource])) {
+                $text = Add-Event $text $eventPair.Name $eventPair.Value
+                $eventCount++
+            }
         }
         $destination = Join-Resource $ContentDir $resource
         Write-Text $destination $text
