@@ -1,15 +1,14 @@
 import argparse
-import array
 import json
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
-import wave
 from pathlib import Path
 
-from resource import replace_data_block
+from patch_gameinfo import patch as patch_gameinfo
+from resource import replace_block, replace_data_block
 from vpk import VpkReader, write_vpk
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,50 +30,24 @@ ENCODING = """<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0
 """
 
 
-def write_with_gain(source, destination, gain):
-    if gain == 1.0:
-        shutil.copyfile(source, destination)
-        return 0
-    with wave.open(str(source), "rb") as reader:
-        params = reader.getparams()
-        frames = reader.readframes(params.nframes)
-    if params.sampwidth != 2:
-        sys.exit(f"{source} must be 16-bit PCM to apply gain")
-    samples = array.array("h", frames)
-    clipped = 0
-    for index, sample in enumerate(samples):
-        value = round(sample * gain)
-        if value > 32767 or value < -32768:
-            clipped += 1
-            value = max(-32768, min(32767, value))
-        samples[index] = value
-    with wave.open(str(destination), "wb") as writer:
-        writer.setparams(params)
-        writer.writeframes(samples.tobytes())
-    return clipped
-
-
 def load_json(name):
     path = MOD / name
     return json.loads(path.read_text("utf-8")) if path.is_file() else {}
 
 
 def prepare_sounds(content):
-    config = load_json("sounds.json")
-    gain = config.get("gain", 1.0)
+    sounds = load_json("sounds.json")
     (content / "sounds").mkdir(parents=True, exist_ok=True)
     (content / "sounds" / "encoding.txt").write_text(ENCODING)
 
     sources = {}
-    for target, source in config.get("sounds", {}).items():
+    for target, source in sounds.items():
         source_path = MOD / source
         if not source_path.is_file():
             sys.exit(f"missing sound {source_path}")
         destination = content / f"{target}{source_path.suffix}"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        clipped = write_with_gain(source_path, destination, gain)
-        if clipped:
-            print(f"warning: {source} clipped {clipped} samples at gain {gain}")
+        shutil.copyfile(source_path, destination)
         sources[destination] = f"{target}.vsnd_c"
     return sources
 
@@ -206,6 +179,43 @@ def prepare_soundevents(content, s2v, game_citadel):
     return sources
 
 
+def decompile_resource(s2v, game_citadel, resource, output):
+    result = subprocess.run(
+        [str(s2v), "-i", str(game_citadel / "pak01_dir.vpk"), "--vpk_filepath", f"{resource}_c", "-d", "-o", str(output)],
+        capture_output=True,
+        text=True,
+        errors="replace",
+    )
+    produced = [path for path in output.rglob("*") if path.is_file()]
+    if result.returncode != 0 or len(produced) != 1:
+        sys.exit(f"could not decompile {resource}\n{result.stdout}{result.stderr}")
+    return produced[0].read_text("utf-8")
+
+
+def prepare_panorama(content, s2v, game_citadel):
+    config = load_json("panorama.json")
+    if not config:
+        return {}
+    if not s2v.is_file():
+        sys.exit(f"missing {s2v}")
+
+    sources = {}
+    for resource, override in config.get("files", {}).items():
+        with tempfile.TemporaryDirectory() as scratch:
+            text = decompile_resource(s2v, game_citadel, resource, Path(scratch))
+        for old, new in override.get("replace", []):
+            if old not in text:
+                sys.exit(f"{old!r} not found in {resource}")
+            text = text.replace(old, new, 1)
+        for append in override.get("append", []):
+            text += "\n" + (MOD / append).read_text("utf-8")
+        destination = content / resource
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(text, "utf-8", newline="\n")
+        sources[destination] = f"{resource}_c"
+    return sources
+
+
 def compile_addon(csdk, s2v, game_citadel):
     compiler = csdk / "game" / "bin_cs2" / "win64" / "resourcecompiler.exe"
     if not compiler.is_file():
@@ -214,7 +224,7 @@ def compile_addon(csdk, s2v, game_citadel):
     content = csdk / "content" / "citadel_addons" / ADDON
     game = csdk / "game" / "citadel_addons" / ADDON
     for folder in (content, game):
-        for child in ("sounds", "soundevents"):
+        for child in ("sounds", "soundevents", "panorama"):
             shutil.rmtree(folder / child, ignore_errors=True)
     game.mkdir(parents=True, exist_ok=True)
     addoninfo = game / "addoninfo.txt"
@@ -224,6 +234,7 @@ def compile_addon(csdk, s2v, game_citadel):
     sources = prepare_sounds(content)
     soundevents = prepare_soundevents(content, s2v, game_citadel)
     sources.update(soundevents)
+    sources.update(prepare_panorama(content, s2v, game_citadel))
     if not sources:
         return {}
 
@@ -253,15 +264,21 @@ def compile_addon(csdk, s2v, game_citadel):
     return files
 
 
-def collect_files(csdk, s2v, game_citadel):
+def package_scripts(game_citadel):
+    scripts = load_json("panorama.json").get("scripts", {})
+    if not scripts:
+        return {}
+    stock = VpkReader(game_citadel / "pak01_dir.vpk")
     files = {}
+    for resource, script in scripts.items():
+        template = stock.read(f"{script['template']}_c")
+        source = (MOD / script["source"]).read_bytes()
+        files[f"{resource}_c"] = replace_block(template, "DATA", source)
+    return files
 
-    raw = MOD / "files"
-    if raw.is_dir():
-        for path in raw.rglob("*"):
-            if path.is_file() and path.name != ".gitkeep":
-                files[path.relative_to(raw).as_posix()] = path.read_bytes()
 
+def collect_files(csdk, s2v, game_citadel):
+    files = package_scripts(game_citadel)
     files.update(compile_addon(csdk, s2v, game_citadel))
     return files
 
@@ -295,6 +312,19 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(output.read_bytes())
         print(f"installed {target}")
+        apply_setup(game_citadel)
+
+
+def apply_setup(game_citadel):
+    gameinfo = game_citadel / "gameinfo.gi"
+    data, changed = patch_gameinfo(gameinfo.read_bytes())
+    if not changed:
+        return
+    try:
+        gameinfo.write_bytes(data)
+        print(f"patched {gameinfo}")
+    except PermissionError:
+        print(f"warning: could not patch {gameinfo}, close Deadlock and run tools/patch_gameinfo.py")
 
 
 if __name__ == "__main__":

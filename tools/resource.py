@@ -1,5 +1,7 @@
 import struct
 
+ALIGNMENT = 16
+
 
 def read_blocks(data):
     _, _, _, block_offset, block_count = struct.unpack_from("<IHHII", data, 0)
@@ -19,13 +21,21 @@ def block_bytes(data, name):
     raise ValueError(f"resource has no {name} block")
 
 
-def replace_data_block(template, compiled):
+def replace_block(template, name, replacement):
     blocks = read_blocks(template)
-    name, entry, start, size = blocks[-1]
-    if name != "DATA" or start + size != len(template):
-        raise ValueError("template DATA block is not the last block")
-    data = block_bytes(compiled, "DATA")
-    result = bytearray(template[:start] + data)
-    struct.pack_into("<I", result, entry + 8, len(data))
+    if name not in [block[0] for block in blocks]:
+        raise ValueError(f"template has no {name} block")
+    first_start = min(start for _, _, start, _ in blocks)
+    result = bytearray(template[:first_start])
+    for block_name, entry, start, size in blocks:
+        content = replacement if block_name == name else template[start:start + size]
+        while len(result) % ALIGNMENT:
+            result.append(0)
+        struct.pack_into("<II", result, entry + 4, len(result) - (entry + 4), len(content))
+        result += content
     struct.pack_into("<I", result, 0, len(result))
     return bytes(result)
+
+
+def replace_data_block(template, compiled):
+    return replace_block(template, "DATA", block_bytes(compiled, "DATA"))

@@ -1,0 +1,149 @@
+@define hfHitColor: white;
+@define hfCritColor: #d42020;
+@define hfFadeDuration: 0.2s;
+@define hfOpacity: 0.8;
+
+#hit_markers
+{
+	transition-property: opacity;
+	transition-duration: 0s;
+}
+
+.show_hit_marker #hit_markers,
+.show_crit_hit_marker #hit_markers
+{
+	opacity: hfOpacity;
+	transition-property: opacity;
+	transition-duration: hfFadeDuration;
+	transition-timing-function: cubic-bezier( 0.16, 1, 0.3, 1 );
+}
+
+.hit_marker,
+.show_hit_marker .hit_marker,
+.show_crit_hit_marker .hit_marker
+{
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
+	width: 6.93px;
+	height: 12px;
+	background-color: hfHitColor;
+	box-shadow: none;
+	clip: radial( 50% 0%, 163.9deg, 32.2deg );
+	overflow: noclip;
+	transition-property: none;
+	transition-duration: 0s;
+	transition-delay: 0s;
+}
+
+.show_crit_hit_marker .hit_marker
+{
+	background-color: hfCritColor;
+}
+
+.hf_ready .hit_marker
+{
+	background-color: hfHitColor;
+}
+
+.hf_ready.hf_crit .hit_marker
+{
+	background-color: hfCritColor;
+}
+
+#TopLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-45deg) translateX(-11.9px) translateY(-11.9px);
+}
+
+#TopRightHitMarker.hit_marker
+{
+	transform: rotateZ(45deg) translateX(11.9px) translateY(-11.9px);
+}
+
+#BottomRightHitMarker.hit_marker
+{
+	transform: rotateZ(135deg) translateX(11.9px) translateY(11.9px);
+}
+
+#BottomLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-135deg) translateX(-11.9px) translateY(11.9px);
+}
+
+.hf_step_2 .hit_marker
+{
+	height: 17.42px;
+	clip: radial( 50% 0%, 168.75deg, 22.5deg );
+}
+
+.hf_step_2 #TopLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-45deg) translateX(-13.81px) translateY(-13.81px);
+}
+
+.hf_step_2 #TopRightHitMarker.hit_marker
+{
+	transform: rotateZ(45deg) translateX(13.81px) translateY(-13.81px);
+}
+
+.hf_step_2 #BottomRightHitMarker.hit_marker
+{
+	transform: rotateZ(135deg) translateX(13.81px) translateY(13.81px);
+}
+
+.hf_step_2 #BottomLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-135deg) translateX(-13.81px) translateY(13.81px);
+}
+
+.hf_step_3 .hit_marker
+{
+	height: 27.31px;
+	clip: radial( 50% 0%, 172.77deg, 14.46deg );
+}
+
+.hf_step_3 #TopLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-45deg) translateX(-17.31px) translateY(-17.31px);
+}
+
+.hf_step_3 #TopRightHitMarker.hit_marker
+{
+	transform: rotateZ(45deg) translateX(17.31px) translateY(-17.31px);
+}
+
+.hf_step_3 #BottomRightHitMarker.hit_marker
+{
+	transform: rotateZ(135deg) translateX(17.31px) translateY(17.31px);
+}
+
+.hf_step_3 #BottomLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-135deg) translateX(-17.31px) translateY(17.31px);
+}
+
+.hf_step_4 .hit_marker
+{
+	height: 40.04px;
+	clip: radial( 50% 0%, 175.06deg, 9.89deg );
+}
+
+.hf_step_4 #TopLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-45deg) translateX(-21.81px) translateY(-21.81px);
+}
+
+.hf_step_4 #TopRightHitMarker.hit_marker
+{
+	transform: rotateZ(45deg) translateX(21.81px) translateY(-21.81px);
+}
+
+.hf_step_4 #BottomRightHitMarker.hit_marker
+{
+	transform: rotateZ(135deg) translateX(21.81px) translateY(21.81px);
+}
+
+.hf_step_4 #BottomLeftHitMarker.hit_marker
+{
+	transform: rotateZ(-135deg) translateX(-21.81px) translateY(21.81px);
+}

@@ -1,0 +1,18 @@
+{
+  "files": {
+    "panorama/styles/ability_hud_elements/element_gun.vcss": {
+      "append": ["panorama/element_gun_hitmarker.css"]
+    },
+    "panorama/layout/ability_hud_elements/element_gun.vxml": {
+      "replace": [
+        ["\t</styles>\n", "\t</styles>\n\t<scripts>\n\t\t<include src=\"s2r://panorama/scripts/hit_feedback.vts\" />\n\t</scripts>\n"]
+      ]
+    }
+  },
+  "scripts": {
+    "panorama/scripts/hit_feedback.vts": {
+      "template": "panorama/scripts/async.vts",
+      "source": "panorama/hit_feedback.js"
+    }
+  }
+}

@@ -77,7 +77,7 @@ def main():
     gameinfo = args.game / "game" / "citadel" / "gameinfo.gi"
     data, changed = patch(gameinfo.read_bytes())
     if not changed:
-        print(f"{gameinfo} already mounts addons")
+        print(f"already patched {gameinfo}")
         return
 
     backup = gameinfo.with_name("gameinfo.gi.hitfeedback-backup")
