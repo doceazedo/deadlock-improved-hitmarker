@@ -5,14 +5,11 @@
     },
     "panorama/layout/ability_hud_elements/element_gun.vxml": {
       "replace": [
-        ["\t</styles>\n", "\t</styles>\n\t<scripts>\n\t\t<include src=\"s2r://panorama/scripts/hit_feedback.vts\" />\n\t</scripts>\n"]
+        ["\t</styles>\n", "\t</styles>\n\t<scripts>\n\t\t<include src=\"s2r://panorama/scripts/improved_hitmarker.vjs_c\" />\n\t</scripts>\n"]
       ]
     }
   },
   "scripts": {
-    "panorama/scripts/hit_feedback.vts": {
-      "template": "panorama/scripts/async.vts",
-      "source": "panorama/hit_feedback.js"
-    }
+    "panorama/scripts/improved_hitmarker.vjs": "panorama/improved_hitmarker.js"
   }
 }
