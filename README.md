@@ -7,9 +7,7 @@ Deadlock mod that replaces the hitmarker visuals and sounds.
 
 ## Installing
 
-GameBanana: (botar link aqui)
-
-Deadlock Mod Manager: (botar link aqui)
+Download it from GameBanana: https://gamebanana.com/mods/728587
 
 Or build and install manually.
 
