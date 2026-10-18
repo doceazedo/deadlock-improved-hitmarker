@@ -1,6 +1,10 @@
 $RepoRoot = Split-Path $PSScriptRoot -Parent
 $ModName = "improved_hitmarker"
-$DistVpk = Join-Path $RepoRoot "dist\$ModName.vpk"
+
+function Get-DistVpk([bool]$NoSound) {
+    $suffix = if ($NoSound) { "_no_sound" } else { "" }
+    return Join-Path $RepoRoot "dist\$ModName$suffix.vpk"
+}
 
 function Get-DotEnv {
     $values = @{}

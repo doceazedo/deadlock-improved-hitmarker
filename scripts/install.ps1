@@ -1,10 +1,12 @@
 param(
     [string]$Game,
+    [switch]$NoSound,
     [ValidateRange(0, 99)][int]$Pak = 0
 )
 
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "common.ps1")
+$DistVpk = Get-DistVpk $NoSound
 
 $GameInfoEncoding = [Text.Encoding]::GetEncoding(28591)
 $RequiredSearchPaths = @(

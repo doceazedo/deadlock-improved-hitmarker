@@ -136,6 +136,9 @@
 	}
 
 	function playAbilitySound() {
+		if (!ABILITY_SOUND) {
+			return;
+		}
 		try {
 			$.DispatchEvent("PlaySoundEffect", ABILITY_SOUND);
 		} catch (error) {

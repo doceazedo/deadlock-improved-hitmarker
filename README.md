@@ -2,8 +2,9 @@
 
 Deadlock mod that replaces the hitmarker visuals and sounds.
 
-- Custom hit and headshot sounds
-- Custom hitmarker inspired by Overwatch, including red color for crits
+- New custom-made hit & headshot sounds
+- New Overwatch-inspired hitmarker (with red color for crits)
+- Show hitmarkers when hitting skills as well
 
 ## Installing
 
@@ -25,10 +26,14 @@ Run this command to build the mod:
 
 ```powershell
 .\scripts\build.ps1
+# or just the hitmarker, without custom sounds:
+.\scripts\build.ps1 -NoSound
 ```
 
 With Deadlock closed, install the mod in your game path by running:
 
 ```powershell
 .\scripts\install.ps1
+# or:
+.\scripts\build.ps1 -NoSound
 ```

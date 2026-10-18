@@ -3,12 +3,14 @@ param(
     [string]$Csdk,
     [string]$S2v,
     [switch]$Install,
+    [switch]$NoSound,
     [ValidateRange(0, 99)][int]$Pak = 0
 )
 
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "common.ps1")
 
+$DistVpk = Get-DistVpk $NoSound
 $Mod = Join-Path $RepoRoot "mod"
 $Game = Resolve-DeadlockRoot $Game
 $Csdk = Resolve-CsdkRoot $Csdk
@@ -22,6 +24,7 @@ $Utf8 = New-Object System.Text.UTF8Encoding $false
 $Invariant = [Globalization.CultureInfo]::InvariantCulture
 $Silent = "sounds/common/null.vsnd"
 $Alignment = 16
+$AbilitySound = 'const ABILITY_SOUND = "ImprovedHitmarker.Ability";'
 $EventPattern = [regex]::new('^\t([\w.\-]+) = \n\t\{\n(.*?)^\t\}\n', "Multiline, Singleline")
 $BasePattern = [regex]::new('^\t\tbase = "([^"]+)"', "Multiline")
 $VolumePattern = [regex]::new('^\t\tvolume = (-?[\d.]+)$', "Multiline")
@@ -404,7 +407,14 @@ function Add-Panorama($Sources, [string]$Scratch) {
     }
     foreach ($scriptPair in (Get-Pairs $config.scripts)) {
         $destination = Join-Resource $ContentDir ([IO.Path]::ChangeExtension($scriptPair.Name, ".js"))
-        Write-Text $destination (Read-Text (Join-Resource $Mod $scriptPair.Value))
+        $script = Read-Text (Join-Resource $Mod $scriptPair.Value)
+        if ($NoSound) {
+            if (-not $script.Contains($AbilitySound)) {
+                throw "'$AbilitySound' not found in $($scriptPair.Value)"
+            }
+            $script = $script.Replace($AbilitySound, 'const ABILITY_SOUND = "";')
+        }
+        Write-Text $destination $script
         $Sources[$destination] = $scriptPair.Name + "_c"
     }
 }
@@ -458,8 +468,11 @@ if (-not (Test-Path -LiteralPath $addonInfo)) {
 $scratch = New-ScratchDirectory
 try {
     $sources = [ordered]@{}
-    Add-Sounds $sources
-    $soundEvents = @(Add-SoundEvents $sources $scratch)
+    $soundEvents = @()
+    if (-not $NoSound) {
+        Add-Sounds $sources
+        $soundEvents = @(Add-SoundEvents $sources $scratch)
+    }
     Add-Panorama $sources $scratch
     if ($sources.Count -eq 0) {
         throw "nothing to pack"
@@ -482,5 +495,5 @@ foreach ($compiled in ($sources.Values | Sort-Object)) {
 }
 
 if ($Install) {
-    & (Join-Path $PSScriptRoot "install.ps1") -Game $Game -Pak $Pak
+    & (Join-Path $PSScriptRoot "install.ps1") -Game $Game -Pak $Pak -NoSound:$NoSound
 }
